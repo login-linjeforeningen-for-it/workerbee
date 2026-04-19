@@ -1,32 +1,54 @@
 # Workerbee API
-This is the main API for Beehive and Queenbee applications. It is built using Go and Gin framework, and uses PostgreSQL as the database. It has both protected and public endpoints along with comprehensive documentation. Its endpoints are documented using swagger and can be accessed a `/api/v2/docs` once the application is running. The API is capable of both talking to a PostgreSQL database and a DigitalOcean Spaces instance for file storage, this is used to store images.
 
-# Beehive Database
-This is the database currently used by Login for our beehive production environment. It contains a `db/init.sql` file with the structure of the database, and a `db/dummydata.sql` file which contains the same structure but has also been populated with testdata.
+Workerbee is the main API for the Beehive and Queenbee applications. It is built with Go and the Gin framework, uses PostgreSQL as its primary database, and serves both public and protected endpoints. API documentation is available at `/api/v2/docs` once the application is running.
 
-## Running the application
-### Production:
-The production database is set up using the `init.sql` file.  
-Start it with `docker compose up --build` \
-This will start both the database and the API server.
+The API also integrates with object storage for file handling, which is used for images and other media uploads.
 
-### Development:
-The development database is set up using the `dummydata.sql` which means its automatically populated with test data.  
-Remember to set the `INIT_SQL_FILE` variabel to `./db/dummydata.sql`  
-Start it with `docker compose up --build`
+## Beehive Database
 
-### Environment Variables
-The application uses the following environment variables. These can be set in a `.env` file in the root directory.
+This repository includes the database setup used by Login for Workerbee. The `db` directory contains:
 
-| Variable                 | Default Value   | Description                                      |
-|--------------------------|-----------------|--------------------------------------------------|
-| DB_PASSWORD        | (required)      | Password for the PostgreSQL database.            |
-| INIT_SQL_FILE            | `./db/init.sql` | Path to the SQL file to initialize the database. |
-| DB_USER            | (required)      | Username for the PostgreSQL database.            |
-| DB              | (required)      | Name of the PostgreSQL database.                 |
-| DB_HOST            | (required)      | Hostname for the PostgreSQL database.            |
-| DB_PORT            | (optional)      | Port for the PostgreSQL database.                |
-| PORT                     | (optional)      | Port for the API server to listen on.            |
-| DO_URL                   | (required)      | DigitalOcean Spaces endpoint URL.                |
-| DO_SECRET_ACCESS_KEY     | (required)      | DigitalOcean Spaces secret access key.           |
-| DO_ACCESS_KEY_ID         | (required)      | DigitalOcean Spaces access key ID.               |
+- `init.up.sql` for the base database structure
+- `dummydata.sql` for the same structure with seeded test data
+
+## Running the project
+
+Start the full stack with:
+
+```sh
+docker compose up --build
+```
+
+This starts both the PostgreSQL database and the Workerbee API.
+
+For local development, use the seeded SQL file if you want test data. Otherwise use the base schema.
+
+## Environment
+
+Workerbee reads configuration from a `.env` file in the project root. Start by getting a working `.env` file from 1Password.
+
+The main settings cover:
+
+- database connection
+- application host and port
+- object storage credentials
+- protected endpoint rate limiting
+
+## Project structure
+
+- `api/` contains the Go application
+- `api/handlers/` contains the HTTP handlers
+- `api/services/` contains business logic
+- `api/repositories/` and `api/db/` contain data access code
+- `api/routes_internal/` registers routes under `/api/v2`
+- `api/docs/` contains the generated API documentation
+- `db/` contains database initialization files
+- `docker-compose.yml` starts the API and database together
+- `Dockerfile` builds the application container
+
+## Getting started
+
+1. Get a valid `.env` file.
+2. Run `docker compose up --build`.
+3. Open `/api/v2/docs` to explore the API.
+4. Check `db/` if you need seeded or empty local database initialization.
