@@ -144,7 +144,12 @@ func Route(c *gin.Engine, h *handlers.Handler) {
 			jobs.GET("/protected/:id", middleware.AuthMiddleware(), h.GetProtectedJob)
 			jobs.GET("", h.GetJobs)
 			jobs.GET("/protected", middleware.AuthMiddleware(), h.GetProtectedJobs)
-			jobs.POST("", h.CreateJob)
+			jobs.POST(
+				"",
+				middleware.AuthMiddleware(),
+				middleware.RateLimitMiddleware(config.AllowedRequestsPerMinute),
+				h.CreateJob,
+			)
 			jobs.PUT(
 				"/:id",
 				middleware.AuthMiddleware(),
