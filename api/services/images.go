@@ -60,7 +60,7 @@ func (is *ImageService) UploadImage(file *multipart.FileHeader, ctx context.Cont
 
 	ops := &webp.Options{
 		Lossless: false,
-		Quality:  90,
+		Quality:  internal.WebPImageQuality,
 	}
 
 	buf := new(bytes.Buffer)

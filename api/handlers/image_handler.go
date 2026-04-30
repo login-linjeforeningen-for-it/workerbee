@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"path/filepath"
+	"strings"
 	"workerbee/internal"
 
 	"github.com/gin-gonic/gin"
@@ -24,9 +25,19 @@ import (
 // @Router       /api/v2/images/{path} [post]
 func (h *Handler) UploadImage(c *gin.Context) {
 	path := c.Param("path")
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, internal.MaxImageUploadSize)
+
+	if c.Request.ContentLength > internal.MaxImageUploadSize {
+		internal.HandleError(c, internal.ErrImageTooLarge)
+		return
+	}
 
 	file, err := c.FormFile("image")
 	if err != nil {
+		if strings.Contains(err.Error(), "request body too large") {
+			internal.HandleError(c, internal.ErrImageTooLarge)
+			return
+		}
 		internal.HandleError(c, err)
 		return
 	}

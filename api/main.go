@@ -4,6 +4,7 @@ import (
 	"workerbee/config"
 	client "workerbee/db"
 	"workerbee/handlers"
+	"workerbee/internal"
 	"workerbee/internal/middleware"
 	repositories "workerbee/repositories"
 	"workerbee/routes_internal"
@@ -33,6 +34,7 @@ func main() {
 	svcs := services.NewServices(repos)
 
 	router := gin.New()
+	router.MaxMultipartMemory = internal.MaxImageUploadSize
 
 	// handler container
 	h := &handlers.Handler{

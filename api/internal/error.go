@@ -53,7 +53,7 @@ var (
 			Message: "invalid location type does not exist in enum",
 		},
 		ErrInvalidJobType:         {Status: http.StatusBadRequest, Message: "invalid job type does not exist in enum"},
-		ErrImageTooLarge:          {Status: http.StatusBadRequest, Message: "image size exceeds maximum limit, max 1MB"},
+		ErrImageTooLarge:          {Status: http.StatusBadRequest, Message: "image size exceeds maximum limit, max 50MB"},
 		ErrInvalidImageRatio:      {Status: http.StatusBadRequest, Message: "invalid image aspect ratio, max 2.5"},
 		ErrS3ClientNotInitialized: {Status: http.StatusInternalServerError, Message: "s3 client not initialized"},
 		ErrConflict:               {Status: http.StatusConflict, Message: "resource already exists"},
