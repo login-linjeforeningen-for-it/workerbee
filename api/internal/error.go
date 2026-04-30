@@ -62,6 +62,39 @@ var (
 	}
 )
 
+func logRequestError(c *gin.Context, status int, err error) {
+	method := ""
+	path := ""
+	route := ""
+	query := ""
+	remoteAddr := ""
+	userAgent := ""
+	params := gin.Params(nil)
+
+	if c != nil && c.Request != nil {
+		method = c.Request.Method
+		path = c.Request.URL.Path
+		query = c.Request.URL.RawQuery
+		remoteAddr = c.ClientIP()
+		userAgent = c.Request.UserAgent()
+		route = c.FullPath()
+		params = c.Params
+	}
+
+	log.Printf(
+		"Got error: err=%v status=%d method=%s path=%s route=%s query=%q remote=%s user_agent=%q params=%v",
+		err,
+		status,
+		method,
+		path,
+		route,
+		query,
+		remoteAddr,
+		userAgent,
+		params,
+	)
+}
+
 func HandleError(c *gin.Context, err error) bool {
 	if err == nil {
 		return false
@@ -70,13 +103,13 @@ func HandleError(c *gin.Context, err error) bool {
 	for k, v := range ErrorMap {
 		if errors.Is(err, k) {
 			c.JSON(v.Status, gin.H{"error": v.Message})
-			log.Println("Got error: ", err)
+			logRequestError(c, v.Status, err)
 			return true
 		}
 	}
 
 	c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
-	log.Println("Got error: ", err)
+	logRequestError(c, http.StatusInternalServerError, err)
 	return true
 }
 

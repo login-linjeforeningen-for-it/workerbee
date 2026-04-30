@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	"workerbee/internal"
 	"workerbee/models"
@@ -94,6 +95,10 @@ func (h *Handler) GetAlertByServiceAndPage(c *gin.Context) {
 	page := c.DefaultQuery("page", "/")
 
 	alert, err := h.Services.Alerts.GetAlertByServiceAndPage(service, page)
+	if errors.Is(err, internal.ErrNoRow) {
+		c.JSON(http.StatusOK, nil)
+		return
+	}
 	if internal.HandleError(c, err) {
 		return
 	}
