@@ -18,7 +18,6 @@ func Route(c *gin.Engine, h *handlers.Handler) {
 		v2.GET("/ping", handlers.PingHandler)
 		v2.GET("/docs", handlers.GetDocs)
 		v2.GET("/status", handlers.GetStatus)
-		v2.POST("/status/storage-proof", h.CreateStorageProof)
 		storage := v2.Group("/s3", middleware.AuthMiddleware())
 		{
 			storage.GET("/buckets", h.ListStorageBuckets)
