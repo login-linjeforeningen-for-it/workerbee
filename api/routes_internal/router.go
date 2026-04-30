@@ -18,6 +18,7 @@ func Route(c *gin.Engine, h *handlers.Handler) {
 		v2.GET("/ping", handlers.PingHandler)
 		v2.GET("/docs", handlers.GetDocs)
 		v2.GET("/status", handlers.GetStatus)
+		v2.POST("/status/storage-proof", h.CreateStorageProof)
 		events := v2.Group("/events")
 		{
 			events.GET("/protected/:id", middleware.AuthMiddleware(), h.GetProtectedEvent)

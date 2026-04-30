@@ -15,6 +15,7 @@ var (
 	StorageAccessKeyID       string
 	StorageSecretAccessKey   string
 	StorageRegion            string
+	StorageProofToken        string
 	StartTime                time.Time
 	RedisAddr                string
 	RedisPassword            string
@@ -53,6 +54,7 @@ func Init() {
 	StorageAccessKeyID = GetEnv("S3_ACCESS_KEY_ID", GetEnv("DO_ACCESS_KEY_ID", ""))
 	StorageSecretAccessKey = GetEnv("S3_SECRET_ACCESS_KEY", GetEnv("DO_SECRET_ACCESS_KEY", ""))
 	StorageRegion = GetEnv("S3_REGION", "us-east-1")
+	StorageProofToken = GetEnv("STORAGE_PROOF_TOKEN", "")
 	RedisAddr = GetEnv("REDIS_ADDR", "localhost:6379")
 	RedisPassword = GetEnv("REDIS_PASSWORD", "")
 	RedisDB = GetEnvAsInt("REDIS_DB", 0)

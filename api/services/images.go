@@ -3,6 +3,7 @@ package services
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
@@ -30,6 +31,22 @@ func NewImageService(repo repositories.ImageRepository) *ImageService {
 	return &ImageService{
 		repo: repo,
 	}
+}
+
+func (is *ImageService) UploadStorageProof(ctx context.Context) (string, error) {
+	const key = internal.IMG_PATH + "events/workerbee-rustfs-proof.png"
+	const image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII="
+
+	payload, err := base64.StdEncoding.DecodeString(image)
+	if err != nil {
+		return "", err
+	}
+
+	if err := is.repo.UploadImage(ctx, key, "image/png", bytes.NewReader(payload)); err != nil {
+		return "", err
+	}
+
+	return key, nil
 }
 
 func (is *ImageService) UploadImage(file *multipart.FileHeader, ctx context.Context, path string) (string, error) {
