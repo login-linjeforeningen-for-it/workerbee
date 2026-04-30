@@ -19,6 +19,17 @@ func Route(c *gin.Engine, h *handlers.Handler) {
 		v2.GET("/docs", handlers.GetDocs)
 		v2.GET("/status", handlers.GetStatus)
 		v2.POST("/status/storage-proof", h.CreateStorageProof)
+		storage := v2.Group("/s3", middleware.AuthMiddleware())
+		{
+			storage.GET("/buckets", h.ListStorageBuckets)
+			storage.POST("/buckets", h.CreateStorageBucket)
+			storage.DELETE("/buckets/:bucket", h.DeleteStorageBucket)
+			storage.GET("/objects", h.ListStorageObjects)
+			storage.POST("/objects", h.UploadStorageObject)
+			storage.PATCH("/objects", h.MoveStorageObject)
+			storage.DELETE("/objects", h.DeleteStorageObject)
+			storage.GET("/objects/download", h.DownloadStorageObject)
+		}
 		events := v2.Group("/events")
 		{
 			events.GET("/protected/:id", middleware.AuthMiddleware(), h.GetProtectedEvent)

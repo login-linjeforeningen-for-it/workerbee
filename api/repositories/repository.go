@@ -20,6 +20,7 @@ type Repositories struct {
 	Alerts        AlertRepository
 	Albums        AlbumsRepository
 	Images        ImageRepository
+	Storage       StorageRepository
 	Calendar      CalendarRepository
 	Quotes        QuoteRepository
 }
@@ -40,6 +41,7 @@ func NewRepositories(db *sqlx.DB, objectStorage *s3.Client) *Repositories {
 		Alerts:        NewAlertRepository(db),
 		Albums:        NewAlbumsRepository(db, objectStorage),
 		Images:        NewImageRepository(db, objectStorage),
+		Storage:       NewStorageRepository(objectStorage),
 		Calendar:      NewCalendarRepository(db),
 		Quotes:        NewQuoteRepository(db),
 	}

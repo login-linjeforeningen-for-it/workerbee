@@ -23,6 +23,7 @@ type Services struct {
 	Honey         *HoneyService
 	Alerts        *AlertService
 	Albums        *AlbumService
+	Storage       *StorageService
 	Calendar      *CalendarService
 	Compressor    *CompressorService
 	Quotes        *QuoteService
@@ -44,6 +45,7 @@ func NewServices(repos *repositories.Repositories) *Services {
 		Honey:         NewHoneyService(repos.Honey),
 		Alerts:        NewAlertService(repos.Alerts),
 		Albums:        NewAlbumService(repos.Albums),
+		Storage:       NewStorageService(repos.Storage),
 		Calendar:      NewCalendarService(repos.Calendar),
 		Compressor:    NewCompressorService(repos.Images, repos.Albums),
 		Quotes:        NewQuoteService(repos.Quotes),
