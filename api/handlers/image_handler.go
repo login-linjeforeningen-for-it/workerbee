@@ -11,7 +11,7 @@ import (
 )
 
 // UploadImage godoc
-// @Summary      Upload an image to a specified path in a digital ocean bucket
+// @Summary      Upload an image to a specified path in object storage
 // @Description  Uploads an image file to the specified path in the image service.
 // @Tags         images
 // @Accept       multipart/form-data
@@ -40,7 +40,7 @@ func (h *Handler) UploadImage(c *gin.Context) {
 }
 
 // GetImageURLs godoc
-// @Summary      Get image URLs in a specified path in a digital ocean bucket
+// @Summary      Get image URLs in a specified path in object storage
 // @Description  Retrieves a list of image URLs available in the specified path.
 // @Tags         images
 // @Produce      json
@@ -60,7 +60,7 @@ func (h *Handler) GetImageURLs(c *gin.Context) {
 }
 
 // DeleteImage godoc
-// @Summary      Delete an image from a specified path in a digital ocean bucket
+// @Summary      Delete an image from a specified path in object storage
 // @Description  Deletes an image file from the specified path in the image service.
 // @Tags         images
 // @Produce      json

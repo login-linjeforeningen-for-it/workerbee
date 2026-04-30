@@ -24,7 +24,7 @@ type Repositories struct {
 	Quotes        QuoteRepository
 }
 
-func NewRepositories(db *sqlx.DB, do *s3.Client) *Repositories {
+func NewRepositories(db *sqlx.DB, objectStorage *s3.Client) *Repositories {
 	return &Repositories{
 		Audiences:     NewAudiencerepository(db),
 		Categories:    NewCategoryRepository(db),
@@ -38,8 +38,8 @@ func NewRepositories(db *sqlx.DB, do *s3.Client) *Repositories {
 		Organizations: NewOrganizationRepository(db),
 		Honey:         NewHoneyRepository(db),
 		Alerts:        NewAlertRepository(db),
-		Albums:        NewAlbumsRepository(db, do),
-		Images:        NewImageRepository(db, do),
+		Albums:        NewAlbumsRepository(db, objectStorage),
+		Images:        NewImageRepository(db, objectStorage),
 		Calendar:      NewCalendarRepository(db),
 		Quotes:        NewQuoteRepository(db),
 	}

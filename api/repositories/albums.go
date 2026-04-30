@@ -30,16 +30,16 @@ type AlbumsRepository interface {
 }
 
 type albumsRepository struct {
-	db     *sqlx.DB
-	do     *s3.Client
-	Bucket string
+	db            *sqlx.DB
+	objectStorage *s3.Client
+	Bucket        string
 }
 
-func NewAlbumsRepository(db *sqlx.DB, do *s3.Client) AlbumsRepository {
+func NewAlbumsRepository(db *sqlx.DB, objectStorage *s3.Client) AlbumsRepository {
 	return &albumsRepository{
-		db:     db,
-		do:     do,
-		Bucket: internal.BUCKET_NAME,
+		db:            db,
+		objectStorage: objectStorage,
+		Bucket:        internal.BUCKET_NAME,
 	}
 }
 
@@ -53,7 +53,7 @@ func (ar *albumsRepository) CreateAlbum(ctx context.Context, body models.CreateA
 
 func (ar *albumsRepository) UploadImagesToAlbum(ctx context.Context, id string, uploads []models.UploadImages) ([]models.UploadPictureResponse, error) {
 	var responses []models.UploadPictureResponse
-	presignedClient := s3.NewPresignClient(ar.do)
+	presignedClient := s3.NewPresignClient(ar.objectStorage)
 
 	if !strings.HasSuffix(id, "/") {
 		id += "/"
@@ -105,7 +105,7 @@ func (ar *albumsRepository) GetAlbum(ctx context.Context, id string) (models.Alb
 	prefix := internal.ALBUM_PATH + path
 
 	var images []string
-	paginator := s3.NewListObjectsV2Paginator(ar.do, &s3.ListObjectsV2Input{
+	paginator := s3.NewListObjectsV2Paginator(ar.objectStorage, &s3.ListObjectsV2Input{
 		Bucket: aws.String(ar.Bucket),
 		Prefix: aws.String(prefix),
 	})
@@ -150,7 +150,7 @@ func (ar *albumsRepository) GetAlbums(ctx context.Context, orderBy, sort, search
 		neededAlbums[albumID] = true
 	}
 
-	paginator := s3.NewListObjectsV2Paginator(ar.do, &s3.ListObjectsV2Input{
+	paginator := s3.NewListObjectsV2Paginator(ar.objectStorage, &s3.ListObjectsV2Input{
 		Bucket: aws.String(ar.Bucket),
 		Prefix: aws.String(internal.ALBUM_PATH),
 	})
@@ -220,7 +220,7 @@ func (ar *albumsRepository) DeleteAlbum(ctx context.Context, id string) (int, er
 	}
 
 	for {
-		listOutput, err := ar.do.ListObjectsV2(ctx, &s3.ListObjectsV2Input{
+		listOutput, err := ar.objectStorage.ListObjectsV2(ctx, &s3.ListObjectsV2Input{
 			Bucket:            aws.String(ar.Bucket),
 			Prefix:            aws.String(prefix),
 			ContinuationToken: continuationToken,
@@ -240,7 +240,7 @@ func (ar *albumsRepository) DeleteAlbum(ctx context.Context, id string) (int, er
 			})
 		}
 
-		_, err = ar.do.DeleteObjects(ctx, &s3.DeleteObjectsInput{
+		_, err = ar.objectStorage.DeleteObjects(ctx, &s3.DeleteObjectsInput{
 			Bucket: aws.String(ar.Bucket),
 			Delete: &types.Delete{
 				Objects: objectsToDelete,
@@ -270,7 +270,7 @@ func (ar *albumsRepository) DeleteAlbumImage(ctx context.Context, key, id string
 		return err
 	}
 
-	_, err = ar.do.DeleteObject(ctx, &s3.DeleteObjectInput{
+	_, err = ar.objectStorage.DeleteObject(ctx, &s3.DeleteObjectInput{
 		Bucket: aws.String(ar.Bucket),
 		Key:    aws.String(key),
 	})
@@ -280,7 +280,7 @@ func (ar *albumsRepository) DeleteAlbumImage(ctx context.Context, key, id string
 func (ar *albumsRepository) SetAlbumCover(ctx context.Context, id string, imageName string) error {
 	prefix := internal.ALBUM_PATH + id + "/"
 
-	listOutput, err := ar.do.ListObjectsV2(ctx, &s3.ListObjectsV2Input{
+	listOutput, err := ar.objectStorage.ListObjectsV2(ctx, &s3.ListObjectsV2Input{
 		Bucket:  aws.String(ar.Bucket),
 		Prefix:  aws.String(prefix + "coverimg_"),
 		MaxKeys: aws.Int32(1),
@@ -294,7 +294,7 @@ func (ar *albumsRepository) SetAlbumCover(ctx context.Context, id string, imageN
 		if strings.Contains(firstKey, "coverimg_") {
 			oldCoverName := strings.Replace(firstKey, "coverimg_", "img_", 1)
 
-			_, err = ar.do.CopyObject(ctx, &s3.CopyObjectInput{
+			_, err = ar.objectStorage.CopyObject(ctx, &s3.CopyObjectInput{
 				Bucket:     aws.String(ar.Bucket),
 				CopySource: aws.String(ar.Bucket + "/" + firstKey),
 				Key:        aws.String(oldCoverName),
@@ -303,7 +303,7 @@ func (ar *albumsRepository) SetAlbumCover(ctx context.Context, id string, imageN
 				return err
 			}
 
-			_, err = ar.do.DeleteObject(ctx, &s3.DeleteObjectInput{
+			_, err = ar.objectStorage.DeleteObject(ctx, &s3.DeleteObjectInput{
 				Bucket: aws.String(ar.Bucket),
 				Key:    aws.String(firstKey),
 			})
@@ -316,7 +316,7 @@ func (ar *albumsRepository) SetAlbumCover(ctx context.Context, id string, imageN
 	path := internal.ALBUM_PATH + id + "/" + imageName
 	coverPath := internal.ALBUM_PATH + id + "/" + coverImageName
 
-	_, err = ar.do.CopyObject(ctx, &s3.CopyObjectInput{
+	_, err = ar.objectStorage.CopyObject(ctx, &s3.CopyObjectInput{
 		Bucket:     aws.String(ar.Bucket),
 		CopySource: aws.String(ar.Bucket + "/" + path),
 		Key:        aws.String(coverPath),
@@ -325,7 +325,7 @@ func (ar *albumsRepository) SetAlbumCover(ctx context.Context, id string, imageN
 		return err
 	}
 
-	_, err = ar.do.PutObjectAcl(ctx, &s3.PutObjectAclInput{
+	_, err = ar.objectStorage.PutObjectAcl(ctx, &s3.PutObjectAclInput{
 		Bucket: aws.String(ar.Bucket),
 		Key:    aws.String(coverPath),
 		ACL:    types.ObjectCannedACLPublicRead,
@@ -334,7 +334,7 @@ func (ar *albumsRepository) SetAlbumCover(ctx context.Context, id string, imageN
 		return err
 	}
 
-	_, err = ar.do.DeleteObject(ctx, &s3.DeleteObjectInput{
+	_, err = ar.objectStorage.DeleteObject(ctx, &s3.DeleteObjectInput{
 		Bucket: aws.String(ar.Bucket),
 		Key:    aws.String(internal.ALBUM_PATH + id + "/" + imageName),
 	})
