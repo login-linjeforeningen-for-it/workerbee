@@ -24,10 +24,10 @@ func init() {
 
 func main() {
 	db := client.Init()
-	do := client.DOInit()
+	objectStorage := client.StorageInit()
 
 	// Repos
-	repos := repositories.NewRepositories(db, do)
+	repos := repositories.NewRepositories(db, objectStorage)
 
 	// Services
 	svcs := services.NewServices(repos)

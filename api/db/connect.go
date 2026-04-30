@@ -3,7 +3,6 @@ package db
 import (
 	"log"
 	"workerbee/config"
-	"workerbee/internal"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
@@ -21,24 +20,24 @@ func Init() *sqlx.DB {
 	return DB
 }
 
-func DOInit() *s3.Client {
+func StorageInit() *s3.Client {
 	client := s3.New(s3.Options{
-		Region: internal.REGION,
+		Region: config.StorageRegion,
 		Credentials: aws.NewCredentialsCache(
 			credentials.StaticCredentialsProvider{
 				Value: aws.Credentials{
-					AccessKeyID:     config.DO_access_key_id,
-					SecretAccessKey: config.DO_secret_access_key,
+					AccessKeyID:     config.StorageAccessKeyID,
+					SecretAccessKey: config.StorageSecretAccessKey,
 				},
 			},
 		),
-		EndpointResolver: s3.EndpointResolverFromURL(config.DO_URL),
+		EndpointResolver: s3.EndpointResolverFromURL(config.StorageURL),
 		UsePathStyle:     true,
 	})
 
 	if client == nil {
-		log.Fatalln("Unable to initialize DigitalOcean S3 client")
+		log.Fatalln("Unable to initialize S3-compatible object storage client")
 	}
-	log.Println("Initialized DigitalOcean S3 client")
+	log.Println("Initialized S3-compatible object storage client")
 	return client
 }

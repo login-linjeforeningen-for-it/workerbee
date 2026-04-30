@@ -11,9 +11,10 @@ var (
 	Port                     string
 	Host                     string
 	DB_url                   string
-	DO_URL                   string
-	DO_access_key_id         string
-	DO_secret_access_key     string
+	StorageURL               string
+	StorageAccessKeyID       string
+	StorageSecretAccessKey   string
+	StorageRegion            string
 	StartTime                time.Time
 	RedisAddr                string
 	RedisPassword            string
@@ -48,9 +49,10 @@ func Init() {
 	db_name := GetEnv("DB", "workerbee")
 	db_host := GetEnv("DB_HOST", "localhost")
 	DB_url = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", user, password, db_host, port, db_name)
-	DO_URL = GetEnv("DO_URL", "")
-	DO_access_key_id = GetEnv("DO_ACCESS_KEY_ID", "")
-	DO_secret_access_key = GetEnv("DO_SECRET_ACCESS_KEY", "")
+	StorageURL = GetEnv("S3_URL", GetEnv("DO_URL", ""))
+	StorageAccessKeyID = GetEnv("S3_ACCESS_KEY_ID", GetEnv("DO_ACCESS_KEY_ID", ""))
+	StorageSecretAccessKey = GetEnv("S3_SECRET_ACCESS_KEY", GetEnv("DO_SECRET_ACCESS_KEY", ""))
+	StorageRegion = GetEnv("S3_REGION", "us-east-1")
 	RedisAddr = GetEnv("REDIS_ADDR", "localhost:6379")
 	RedisPassword = GetEnv("REDIS_PASSWORD", "")
 	RedisDB = GetEnvAsInt("REDIS_DB", 0)
