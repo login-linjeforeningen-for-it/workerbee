@@ -41,10 +41,12 @@ The main API for the Beehive and Queenbee applications, built for [Login](https:
    docker compose up --build
    ```
 
-   | Service | URL                       |
-   |---------|---------------------------|
-   | API     | http://localhost:8500     |
+   | Service | URL                               |
+   |---------|-----------------------------------|
+   | API     | http://localhost:8500             |
    | Docs    | http://localhost:8500/api/v2/docs |
+
+   Port 8500 is the Varnish cache layer. The Go app listens on `PORT` (default `8080`) inside the container.
 
 ## Configuration
 
@@ -53,7 +55,7 @@ All variables go in the root `.env` file.
 | Name                         | Default     | Notes                                               |
 |------------------------------|-------------|-----------------------------------------------------|
 | `HOST`                       | `0.0.0.0`   | API bind address                                    |
-| `PORT`                       | `8081`      | API port inside the container                       |
+| `PORT`                       | `8080`      | Container port; must match the docker-compose mapping (`8500:8080`) |
 | `DB`                         | `workerbee` | Postgres database name                              |
 | `DB_HOST`                    | `localhost` | Postgres host                                       |
 | `DB_PORT`                    | `5432`      | Postgres port                                       |
