@@ -1,54 +1,78 @@
-# Workerbee API
+<div align="center">
 
-Workerbee is the main API for the Beehive and Queenbee applications. It is built with Go and the Gin framework, uses PostgreSQL as its primary database, and serves both public and protected endpoints. API documentation is available at `/api/v2/docs` once the application is running.
+<img src="https://s3.login.no/beehive/img/logo/logo-white-small.svg" alt="Login logo" width="80" height="80" />
 
-The API also integrates with object storage for file handling, which is used for images and other media uploads.
+<h1>Workerbee</h1>
 
-## Beehive Database
+<p>
+  <img src="https://img.shields.io/badge/Go-fd8738?style=flat-square&logo=go&logoColor=white" alt="Go" />
+  <img src="https://img.shields.io/badge/Gin-fd8738?style=flat-square&logo=go&logoColor=white" alt="Gin" />
+  <img src="https://img.shields.io/badge/PostgreSQL-fd8738?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/S3-fd8738?style=flat-square&logo=amazons3&logoColor=white" alt="S3" />
+  <img src="https://img.shields.io/badge/Varnish-fd8738?style=flat-square&logo=varnish&logoColor=white" alt="Varnish" />
+  <img src="https://img.shields.io/badge/Docker-fd8738?style=flat-square&logo=docker&logoColor=white" alt="Docker" />
+</p>
 
-This repository includes the database setup used by Login for Workerbee. The `db` directory contains:
+</div>
 
-- `init.up.sql` for the base database structure
-- `dummydata.sql` for the same structure with seeded test data
+---
 
-## Running the project
+The main API for the Beehive and Queenbee applications, built for [Login](https://login.no).
 
-Start the full stack with:
+## Features
 
-```sh
-docker compose up --build
-```
+- **Bearer token authentication** via Authentik, admin endpoints require the `QueenBee` group
+- **Public and protected endpoints** under `/api/v2`
+- **Swagger docs** available at `/api/v2/docs`
+- **Object storage** for image and media uploads via S3-compatible API
+- **Image processing** with WebP conversion
+- **Rate limiting** on protected endpoints
+- **Varnish cache** in front of the API
 
-This starts both the PostgreSQL database and the Workerbee API.
+## Getting Started
 
-For local development, use the seeded SQL file if you want test data. Otherwise use the base schema.
+1. **Configure environment**
 
-## Environment
+   Create a `.env` file in the repo root. See [Configuration](#configuration) below or grab the values from 1Password.
 
-Workerbee reads configuration from a `.env` file in the project root. Start by getting a working `.env` file from 1Password.
+2. **Start**
 
-The main settings cover:
+   ```bash
+   docker compose up --build
+   ```
 
-- database connection
-- application host and port
-- object storage credentials
-- protected endpoint rate limiting
+   | Service | URL                       |
+   |---------|---------------------------|
+   | API     | http://localhost:8500     |
+   | Docs    | http://localhost:8500/api/v2/docs |
 
-## Project structure
+## Configuration
 
-- `api/` contains the Go application
-- `api/handlers/` contains the HTTP handlers
-- `api/services/` contains business logic
-- `api/repositories/` and `api/db/` contain data access code
-- `api/routes_internal/` registers routes under `/api/v2`
-- `api/docs/` contains the generated API documentation
-- `db/` contains database initialization files
-- `docker-compose.yml` starts the API and database together
-- `Dockerfile` builds the application container
+All variables go in the root `.env` file.
 
-## Getting started
+| Name                         | Default     | Notes                                               |
+|------------------------------|-------------|-----------------------------------------------------|
+| `HOST`                       | `0.0.0.0`   | API bind address                                    |
+| `PORT`                       | `8081`      | API port inside the container                       |
+| `DB`                         | `workerbee` | Postgres database name                              |
+| `DB_HOST`                    | `localhost` | Postgres host                                       |
+| `DB_PORT`                    | `5432`      | Postgres port                                       |
+| `DB_USER`                    | `workerbee` | Postgres username                                   |
+| `DB_PASSWORD`                |             | Postgres password                                   |
+| `S3_URL`                     |             | S3-compatible storage endpoint                      |
+| `S3_ACCESS_KEY_ID`           |             | Storage access key                                  |
+| `S3_SECRET_ACCESS_KEY`       |             | Storage secret key                                  |
+| `S3_REGION`                  | `us-east-1` | Storage region                                      |
+| `ALLOWED_PROTECTED_REQUESTS` | `25`        | Max requests per minute on protected endpoints      |
+| `LOAD_DUMMY_DATA`            | `false`     | Set to `true` to seed the database with test data   |
 
-1. Get a valid `.env` file.
-2. Run `docker compose up --build`.
-3. Open `/api/v2/docs` to explore the API.
-4. Check `db/` if you need seeded or empty local database initialization.
+## Project Structure
+
+- `api/` - Go application
+- `api/handlers/` - HTTP handlers
+- `api/services/` - business logic
+- `api/repositories/` and `api/db/` - data access
+- `api/routes_internal/` - route registration under `/api/v2`
+- `api/docs/` - generated Swagger documentation
+- `db/init.up.sql` - base database schema
+- `db/dummydata.sql` - schema with seeded test data
