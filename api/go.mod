@@ -34,8 +34,6 @@ require (
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
-	github.com/PuerkitoBio/purell v1.2.1 // indirect
-	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.41.7
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.10 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.16
@@ -50,12 +48,8 @@ require (
 	github.com/go-openapi/jsonpointer v0.23.1 // indirect
 	github.com/go-openapi/jsonreference v0.21.5 // indirect
 	github.com/go-openapi/spec v0.22.4 // indirect
-	github.com/go-openapi/swag v0.26.0 // indirect
-	github.com/josharian/intern v1.0.0 // indirect
-	github.com/mailru/easyjson v0.9.2 // indirect
 	golang.org/x/net v0.54.0 // indirect
 	golang.org/x/tools v0.45.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (
@@ -82,8 +76,8 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.3.1 // indirect
 	golang.org/x/arch v0.27.0 // indirect
-	golang.org/x/crypto v0.51.0 // indirect
-	golang.org/x/sys v0.44.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
