@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"os"
 	"time"
 	"workerbee/db"
@@ -200,6 +201,9 @@ func (r *eventRepositories) GetEventCategories() ([]models.EventCategory, error)
 func (r *eventRepositories) GetEvent(id string) (models.Event, error) {
 	event, err := db.ExecuteOneRow[models.Event](r.db, "./db/events/get_event.sql", id)
 	if err != nil {
+		if errors.Is(err, internal.ErrNoRow) {
+			return models.Event{}, internal.ErrNotFound
+		}
 		return models.Event{}, internal.ErrInvalid
 	}
 	return event, nil
@@ -208,6 +212,9 @@ func (r *eventRepositories) GetEvent(id string) (models.Event, error) {
 func (r *eventRepositories) GetProtectedEvent(id string) (models.Event, error) {
 	event, err := db.ExecuteOneRow[models.Event](r.db, "./db/events/get_protected_event.sql", id)
 	if err != nil {
+		if errors.Is(err, internal.ErrNoRow) {
+			return models.Event{}, internal.ErrNotFound
+		}
 		return models.Event{}, internal.ErrInvalid
 	}
 	return event, nil

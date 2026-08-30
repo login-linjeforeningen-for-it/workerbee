@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"workerbee/internal"
@@ -166,6 +167,10 @@ func (h *Handler) GetEvent(c *gin.Context) {
 	id := c.Param("id")
 
 	event, err := h.Services.Events.GetEvent(id)
+	if errors.Is(err, internal.ErrNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "event not found"})
+		return
+	}
 	if internal.HandleError(c, err) {
 		return
 	}
@@ -187,6 +192,10 @@ func (h *Handler) GetProtectedEvent(c *gin.Context) {
 	id := c.Param("id")
 
 	event, err := h.Services.Events.GetProtectedEvent(id)
+	if errors.Is(err, internal.ErrNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "event not found"})
+		return
+	}
 	if internal.HandleError(c, err) {
 		return
 	}
