@@ -16,9 +16,6 @@ var (
 	StorageSecretAccessKey   string
 	StorageRegion            string
 	StartTime                time.Time
-	RedisAddr                string
-	RedisPassword            string
-	RedisDB                  int
 	AllowedRequestsPerMinute int
 )
 
@@ -53,9 +50,6 @@ func Init() {
 	StorageAccessKeyID = GetEnv("S3_ACCESS_KEY_ID", GetEnv("DO_ACCESS_KEY_ID", ""))
 	StorageSecretAccessKey = GetEnv("S3_SECRET_ACCESS_KEY", GetEnv("DO_SECRET_ACCESS_KEY", ""))
 	StorageRegion = GetEnv("S3_REGION", "us-east-1")
-	RedisAddr = GetEnv("REDIS_ADDR", "localhost:6379")
-	RedisPassword = GetEnv("REDIS_PASSWORD", "")
-	RedisDB = GetEnvAsInt("REDIS_DB", 0)
 
 	StartTime = time.Now()
 	RateLimitRoofStr := GetEnv("ALLOWED_PROTECTED_REQUESTS", "25")
