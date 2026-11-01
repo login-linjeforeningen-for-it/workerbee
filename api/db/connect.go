@@ -32,7 +32,7 @@ func StorageInit() *s3.Client {
 			},
 		),
 		EndpointResolver: s3.EndpointResolverFromURL(config.StorageURL),
-		UsePathStyle:     true,
+		UsePathStyle:     config.StoragePathStyle,
 	})
 
 	if client == nil {

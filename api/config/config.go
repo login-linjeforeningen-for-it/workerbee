@@ -15,6 +15,8 @@ var (
 	StorageAccessKeyID       string
 	StorageSecretAccessKey   string
 	StorageRegion            string
+	StorageBucket            string
+	StoragePathStyle         bool
 	StartTime                time.Time
 	AllowedRequestsPerMinute int
 )
@@ -50,6 +52,8 @@ func Init() {
 	StorageAccessKeyID = GetEnv("S3_ACCESS_KEY_ID", GetEnv("DO_ACCESS_KEY_ID", ""))
 	StorageSecretAccessKey = GetEnv("S3_SECRET_ACCESS_KEY", GetEnv("DO_SECRET_ACCESS_KEY", ""))
 	StorageRegion = GetEnv("S3_REGION", "us-east-1")
+	StorageBucket = GetEnv("S3_BUCKET", "beehive")
+	StoragePathStyle = GetEnv("S3_PATH_STYLE", "true") == "true"
 
 	StartTime = time.Now()
 	RateLimitRoofStr := GetEnv("ALLOWED_PROTECTED_REQUESTS", "25")

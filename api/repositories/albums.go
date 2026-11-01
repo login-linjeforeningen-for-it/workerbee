@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"workerbee/config"
 	"workerbee/db"
 	"workerbee/internal"
 	"workerbee/models"
@@ -39,7 +40,7 @@ func NewAlbumsRepository(db *sqlx.DB, objectStorage *s3.Client) AlbumsRepository
 	return &albumsRepository{
 		db:            db,
 		objectStorage: objectStorage,
-		Bucket:        internal.BUCKET_NAME,
+		Bucket:        config.StorageBucket,
 	}
 }
 
@@ -296,8 +297,9 @@ func (ar *albumsRepository) SetAlbumCover(ctx context.Context, id string, imageN
 
 			_, err = ar.objectStorage.CopyObject(ctx, &s3.CopyObjectInput{
 				Bucket:     aws.String(ar.Bucket),
-				CopySource: aws.String(ar.Bucket + "/" + firstKey),
+				CopySource: aws.String(copySource(ar.Bucket, firstKey)),
 				Key:        aws.String(oldCoverName),
+				ACL:        types.ObjectCannedACLPublicRead,
 			})
 			if err != nil {
 				return err
@@ -318,7 +320,7 @@ func (ar *albumsRepository) SetAlbumCover(ctx context.Context, id string, imageN
 
 	_, err = ar.objectStorage.CopyObject(ctx, &s3.CopyObjectInput{
 		Bucket:     aws.String(ar.Bucket),
-		CopySource: aws.String(ar.Bucket + "/" + path),
+		CopySource: aws.String(copySource(ar.Bucket, path)),
 		Key:        aws.String(coverPath),
 	})
 	if err != nil {

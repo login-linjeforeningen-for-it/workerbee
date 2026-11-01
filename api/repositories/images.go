@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 	"strings"
-	"workerbee/internal"
+	"workerbee/config"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -29,7 +29,7 @@ func NewImageRepository(db *sqlx.DB, objectStorage *s3.Client) ImageRepository {
 	return &imageRepository{
 		db:            db,
 		objectStorage: objectStorage,
-		Bucket:        internal.BUCKET_NAME,
+		Bucket:        config.StorageBucket,
 	}
 }
 

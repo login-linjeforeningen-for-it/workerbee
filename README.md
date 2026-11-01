@@ -65,6 +65,8 @@ All variables go in the root `.env` file.
 | `S3_ACCESS_KEY_ID`           |             | Storage access key                                  |
 | `S3_SECRET_ACCESS_KEY`       |             | Storage secret key                                  |
 | `S3_REGION`                  | `us-east-1` | Storage region                                      |
+| `S3_BUCKET`                  | `beehive`   | Storage bucket                                      |
+| `S3_PATH_STYLE`              | `true`      | Path-style addressing (`false` for virtual-host)    |
 | `ALLOWED_PROTECTED_REQUESTS` | `25`        | Max requests per minute on protected endpoints      |
 | `LOAD_DUMMY_DATA`            | `false`     | Set to `true` to seed the database with test data   |
 

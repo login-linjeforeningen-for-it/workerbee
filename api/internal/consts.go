@@ -4,8 +4,6 @@ const (
 	BASE_PATH                     = "/api/v2"
 	USERINFO_URL                  = "https://authentik.login.no/application/o/userinfo/"
 	ADMIN_GROUP                   = "QueenBee"
-	BUCKET_NAME                   = "beehive"
-	REGION                        = "ams3"
 	IMG_PATH                      = "img/"
 	ALBUM_PATH                    = "albums/"
 	PROTECTED_REQUESTS_PER_MINUTE = 25
