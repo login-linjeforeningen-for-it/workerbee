@@ -1,6 +1,6 @@
 module workerbee
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/disintegration/imaging v1.6.2
@@ -20,7 +20,7 @@ require (
 	github.com/go-openapi/swag/yamlutils v0.26.0 // indirect
 	go.mongodb.org/mongo-driver/v2 v2.6.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/sync v0.20.0 // indirect
+	golang.org/x/sync v0.25.0 // indirect
 )
 
 require (
@@ -28,8 +28,8 @@ require (
 	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/quic-go/qpack v0.6.0 // indirect
 	github.com/quic-go/quic-go v0.59.1 // indirect
-	golang.org/x/image v0.40.0 // indirect
-	golang.org/x/mod v0.36.0 // indirect
+	golang.org/x/image v0.48.0 // indirect
+	golang.org/x/mod v0.42.0 // indirect
 )
 
 require (
@@ -48,8 +48,8 @@ require (
 	github.com/go-openapi/jsonpointer v0.23.1 // indirect
 	github.com/go-openapi/jsonreference v0.21.5 // indirect
 	github.com/go-openapi/spec v0.22.4 // indirect
-	golang.org/x/net v0.54.0 // indirect
-	golang.org/x/tools v0.45.0 // indirect
+	golang.org/x/net v0.63.0 // indirect
+	golang.org/x/tools v0.52.0 // indirect
 )
 
 require (
@@ -76,8 +76,8 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.3.1 // indirect
 	golang.org/x/arch v0.27.0 // indirect
-	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/sys v0.45.0 // indirect
-	golang.org/x/text v0.37.0 // indirect
+	golang.org/x/crypto v0.59.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
