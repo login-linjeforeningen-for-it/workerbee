@@ -47,11 +47,12 @@ type Event struct {
 
 type NewEvent struct {
 	EventBase
-	CategoryID     int  `db:"category_id" json:"category_id,omitempty" validate:"required"`
-	LocationID     *int `db:"location_id" json:"location_id"`
-	RuleID         *int `db:"rule_id" json:"rule_id,omitempty"`
-	AudienceID     *int `db:"audience_id" json:"audience_id,omitempty"`
-	OrganizationID *int `db:"organization_id" json:"organization_id"`
+	CategoryID     int   `db:"category_id" json:"category_id,omitempty" validate:"required"`
+	LocationID     *int  `db:"location_id" json:"location_id"`
+	RuleID         *int  `db:"rule_id" json:"rule_id,omitempty"`
+	AudienceID     *int  `db:"audience_id" json:"audience_id,omitempty"`
+	OrganizationID *int  `db:"organization_id" json:"organization_id"`
+	CreatedIDs     []int `db:"-" json:"created_ids,omitempty"`
 }
 
 type EventWithTotalCount struct {

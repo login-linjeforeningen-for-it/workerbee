@@ -116,6 +116,7 @@ func (r *eventRepositories) CreateMultipleEvents(event models.NewEvent, repeatUn
 			}
 		}
 		rows.Close()
+		event.CreatedIDs = append(event.CreatedIDs, id)
 
 		var deltaDays, offset int
 		switch repeatType {
