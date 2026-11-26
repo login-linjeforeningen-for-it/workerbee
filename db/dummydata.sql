@@ -237,6 +237,7 @@ VALUES
 ('Social', 'Sosialt', '#d62f43'),
 ('Cyberdays', 'Cyberdagene', 'linear-gradient(120deg, hsla(217, 100%, 50%, 1) 10%, hsla(186, 100%, 69%, 1) 100%)'),
 ('Buddyweek', 'Fadderuka', '#fa75a6'),
+('BarKom', 'BarKom', '#f1c40f'),
 ('Other', 'Andre', '#545b5f');
 
 INSERT INTO "jobs" (
